@@ -2,6 +2,9 @@
   <div>
     <h1>Create an organizer</h1>
     <form @submit.prevent="saveOrganizer">
+      <h3>Organizer's name</h3>
+      <BaseInput v-model="organizer.name" type="text" label="name" />
+
       <h3>Organizer's image</h3>
       <UploadImages :max="1" @changed="handleImages" />
       <button type="submit">Submit</button>
@@ -24,6 +27,7 @@ export default {
   data() {
     return {
       organizer: {
+        name: '',
         imageUrls: []
       },
       files: []
@@ -42,10 +46,11 @@ export default {
           .then((response) => {
             console.log(response)
             this.$router.push({
-              name: 'AddOrganizer'
+              name: 'organizerDetail',
+              params: { id: response.data.id }
             })
             this.GStore.flashMessage =
-              'You are successfully add a new organizer'
+              'You are successfully add a new organizer name : '+ response.data.name
             setTimeout(() => {
               this.GStore.flashMessage = ''
             }, 3000)
